@@ -1,0 +1,11 @@
+Algorithm,Accuracy,Precision,Recall,F1-Score (Weighted),ROC-AUC
+Gradient Boosting,0.9315,0.8837,0.8541,0.9311,0.9759
+Bagging (Decision Tree),0.9214,0.8527,0.8504,0.9214,0.9694
+Support Vector Machine,0.9256,0.8886,0.8225,0.9247,0.9687
+Random Forest,0.9219,0.9103,0.7825,0.9199,0.9675
+Logistic Regression,0.9177,0.8786,0.8002,0.9164,0.958
+Decision Tree,0.9165,0.8447,0.8392,0.9164,0.9505
+MLP Neural Network,0.9071,0.8276,0.8206,0.907,0.9465
+K-Nearest Neighbors,0.9108,0.8473,0.8095,0.9102,0.9396
+AdaBoost,0.881,0.8603,0.658,0.8755,0.9188
+Naive Bayes (Gaussian),0.5627,0.3713,0.9368,0.5744,0.8655

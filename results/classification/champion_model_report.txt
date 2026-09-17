@@ -1,0 +1,19 @@
+=== CHAMPION CLASSIFICATION MODEL REPORT ===
+Model Name: Gradient Boosting (Hyperparameter Tuned)
+Best Parameters: {'learning_rate': 0.1, 'max_depth': 5, 'n_estimators': 150}
+
+Accuracy:  0.9350
+Precision: 0.8896
+Recall:    0.8615
+F1-Score:  0.9346
+ROC-AUC:   0.9779
+
+--- Detailed Classification Report ---
+              precision    recall  f1-score   support
+
+ Genuine (0)       0.95      0.96      0.96      2983
+   Fraud (1)       0.89      0.86      0.88      1076
+
+    accuracy                           0.93      4059
+   macro avg       0.92      0.91      0.92      4059
+weighted avg       0.93      0.93      0.93      4059
