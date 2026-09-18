@@ -15,4 +15,5 @@ Thumbs.db
 
 # Temporary notebook scaffolding used while merging the clustering notebooks
 _nb_build.py
+_nb_p3.py
 _nbdump/

@@ -1,0 +1,63 @@
+==============================================================================
+CLUSTERING TRACK — K-MEANS SEGMENTATION EVALUATION REPORT
+Dataset: Airplane Customer Satisfaction
+==============================================================================
+
+--- PIPELINE ---
+Observations            : 103,904 customers
+Features (post-encoding): 23
+Random state            : 42 (enforced throughout)
+Candidates evaluated    : k = 2 .. 10
+Selected model          : K-Means, k = 3
+
+--- SELECTION RATIONALE (k = 3) ---
+Elbow (largest marginal inertia drop) : k = 3 (-127,115 inertia, -6.07%)
+Best k by Silhouette Score            : k = 2 (0.1232)
+Best k by Davies-Bouldin Index        : k = 7 (2.1351)
+Best k by Calinski-Harabasz Index     : k = 2 (14,756.5)
+Note: no single index is optimal at the same k. k=3 is selected as the elbow with a
+near-optimal silhouette (gap 0.0124 to the k=2 peak) and the 2nd best CH, accepting the
+worst Davies-Bouldin (2.7640) in order to isolate a distinct mid-tier service segment.
+
+--- DEPLOYED MODEL METRICS (mandatory) ---
+Silhouette Score         : 0.1108 (10,000-customer sample)
+Davies-Bouldin Index     : 2.7640 (full matrix)
+Calinski-Harabasz Index  : 11,215.2 (full matrix)
+Inertia                  : 1,965,481
+
+--- CLUSTER DISTRIBUTION ---
+Cluster 0:  31,345 customers (30.17%) | mean member silhouette = 0.0450 | satisfied = 25.40%
+Cluster 1:  43,653 customers (42.01%) | mean member silhouette = 0.1730 | satisfied = 74.36%
+Cluster 2:  28,906 customers (27.82%) | mean member silhouette = 0.0886 | satisfied = 15.93%
+
+--- POST-HOC VALIDATION (satisfaction excluded from fitting) ---
+Satisfaction rate spread across clusters : 58.4 percentage points
+Chi-square test of independence          : chi2 = 30,060.1, dof = 2, p = 0.000e+00
+Cramer's V (effect size)                 : 0.5379
+
+--- TOP DISCRIMINATING FEATURES (spread of standardised cluster means) ---
+Inflight entertainment               1.706 SD  (Cluster 1 vs Cluster 2)
+Seat comfort                         1.656 SD  (Cluster 1 vs Cluster 2)
+Cleanliness                          1.587 SD  (Cluster 1 vs Cluster 2)
+Inflight service                     1.520 SD  (Cluster 1 vs Cluster 0)
+Baggage handling                     1.492 SD  (Cluster 1 vs Cluster 0)
+On-board service                     1.420 SD  (Cluster 1 vs Cluster 0)
+Food and drink                       1.389 SD  (Cluster 1 vs Cluster 2)
+
+--- VISUAL ARTIFACTS ---
+  results/clustering/cluster_profile.png
+  results/clustering/cluster_satisfaction_posthoc.png
+  results/clustering/data_quality_audit.png
+  results/clustering/delay_outlier_boxplots.png
+  results/clustering/feature_correlation_heatmap.png
+  results/clustering/feature_scaling_comparison.png
+  results/clustering/kmeans_cluster_distribution.png
+  results/clustering/kmeans_marginal_inertia.png
+  results/clustering/kmeans_selection_curves.png
+  results/clustering/numerical_feature_distributions.png
+  results/clustering/pca_cluster_scatter.png
+  results/clustering/pca_component_analysis.png
+  results/clustering/service_rating_distributions.png
+  results/clustering/skewness_transformation.png
+  results/clustering/target_and_categorical_profile.png
+  results/clustering/tsne_cluster_projection.png
