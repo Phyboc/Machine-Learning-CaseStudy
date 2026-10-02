@@ -1,0 +1,3 @@
+algorithm,linkage,k,silhouette_score,davies_bouldin_score,calinski_harabasz_score,sample_size
+K-Means,N/A,3,0.1085,2.7523,536.6625,5000
+Agglomerative,ward,5,0.1023,2.5657,358.6502,5000
