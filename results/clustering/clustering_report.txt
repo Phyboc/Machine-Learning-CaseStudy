@@ -3,34 +3,43 @@ CLUSTERING TRACK — K-MEANS SEGMENTATION EVALUATION REPORT
 Dataset: Airplane Customer Satisfaction
 ==============================================================================
 
---- PIPELINE ---
-Observations            : 103,904 customers
-Features (post-encoding): 23
-Random state            : 42 (enforced throughout)
-Candidates evaluated    : k = 2 .. 10
-Selected model          : K-Means, k = 3
+--- PIPELINE (official full-data model vs metric evaluation) ---
+Official model           : K-Means, k = 3, fitted on the FULL 103,904 rows
+Metric evaluation pop.   : fixed 10,000-row sample (random_state=42)
+Features (post-encoding) : 23
+Random state             : 42 (enforced throughout)
+Candidates evaluated     : k = 2 .. 10
+Metric rule              : Silhouette, Davies-Bouldin and Calinski-Harabasz are ALL
+                           computed on the same sample; inertia is full-data (the objective).
 
---- SELECTION RATIONALE (k = 3) ---
-Elbow (largest marginal inertia drop) : k = 3 (-127,115 inertia, -6.07%)
+--- SELECTION RATIONALE (UNSUPERVISED EVIDENCE ONLY) ---
+satisfaction plays no part in this decision.
+Elbow (largest marginal inertia drop) : k = 3
 Best k by Silhouette Score            : k = 2 (0.1232)
-Best k by Davies-Bouldin Index        : k = 7 (2.1351)
-Best k by Calinski-Harabasz Index     : k = 2 (14,756.5)
-Note: no single index is optimal at the same k. k=3 is selected as the elbow with a
-near-optimal silhouette (gap 0.0124 to the k=2 peak) and the 2nd best CH, accepting the
-worst Davies-Bouldin (2.7640) in order to isolate a distinct mid-tier service segment.
+Best k by Davies-Bouldin Index        : k = 7 (2.1377)
+Best k by Calinski-Harabasz Index     : k = 2 (1,426.4)
+Selected k                             : k = 3
+The three indices do NOT necessarily agree. k=3 is selected as the elbow with a
+near-optimal silhouette, a highly ranked CH, balanced cluster sizes and the simplest
+model among the near-optimal candidates. Its Davies-Bouldin is NOT the sweep optimum;
+that disagreement is accepted and documented rather than hidden.
 
---- DEPLOYED MODEL METRICS (mandatory) ---
-Silhouette Score         : 0.1108 (10,000-customer sample)
-Davies-Bouldin Index     : 2.7640 (full matrix)
-Calinski-Harabasz Index  : 11,215.2 (full matrix)
-Inertia                  : 1,965,481
+--- DEPLOYED MODEL METRICS (all on the 10,000-row evaluation sample) ---
+Silhouette Score         : 0.1108
+Davies-Bouldin Index     : 2.7456
+Calinski-Harabasz Index  : 1,088.5
+Inertia (full 103,904)  : 1,965,481
 
---- CLUSTER DISTRIBUTION ---
-Cluster 0:  31,345 customers (30.17%) | mean member silhouette = 0.0450 | satisfied = 25.40%
-Cluster 1:  43,653 customers (42.01%) | mean member silhouette = 0.1730 | satisfied = 74.36%
-Cluster 2:  28,906 customers (27.82%) | mean member silhouette = 0.0886 | satisfied = 15.93%
+--- CLUSTER DISTRIBUTION (full-data labels) ---
+Cluster 0:  31,345 customers (30.17%) | mean member silhouette = 0.0450
+Cluster 1:  43,653 customers (42.01%) | mean member silhouette = 0.1730
+Cluster 2:  28,906 customers (27.82%) | mean member silhouette = 0.0886
 
---- POST-HOC VALIDATION (satisfaction excluded from fitting) ---
+--- POST-HOC INTERPRETATION ONLY (satisfaction excluded from fitting/selection) ---
+This association was computed AFTER clustering and did not influence k or any metric.
+  Cluster 0: satisfied = 25.40%
+  Cluster 1: satisfied = 74.36%
+  Cluster 2: satisfied = 15.93%
 Satisfaction rate spread across clusters : 58.4 percentage points
 Chi-square test of independence          : chi2 = 30,060.1, dof = 2, p = 0.000e+00
 Cramer's V (effect size)                 : 0.5379
@@ -44,19 +53,51 @@ Baggage handling                     1.492 SD  (Cluster 1 vs Cluster 0)
 On-board service                     1.420 SD  (Cluster 1 vs Cluster 0)
 Food and drink                       1.389 SD  (Cluster 1 vs Cluster 2)
 
+--- CLUSTER-SIZE SANITY (full-data labels) ---
+k=2: min=49,376 (47.52%) | max=54,528 (52.48%)
+k=3: min=28,906 (27.82%) | max=43,653 (42.01%)
+k=4: min=23,544 (22.66%) | max=27,901 (26.85%)
+k=5: min=18,551 (17.85%) | max=23,530 (22.65%)
+k=6: min=7,464 (7.18%) | max=22,303 (21.47%)
+k=7: min=7,448 (7.17%) | max=18,383 (17.69%)
+k=8: min=7,439 (7.16%) | max=17,654 (16.99%)
+k=9: min=7,001 (6.74%) | max=17,233 (16.59%)
+k=10: min=7,370 (7.09%) | max=17,143 (16.50%)
+
+--- CLUSTER SEPARATION NOTE ---
+Absolute internal indices are modest, and the PCA projection shows substantial overlap.
+This indicates weakly separated / overlapping customer segments rather than sharply
+isolated natural clusters. The PCA overlap is supportive evidence only, because the
+first two components retain a limited share of total variance.
+
 --- VISUAL ARTIFACTS ---
+  results/clustering/agglomerative_calinski_harabasz_by_linkage.png
+  results/clustering/agglomerative_cluster_distribution.png
+  results/clustering/agglomerative_cluster_satisfaction_posthoc.png
+  results/clustering/agglomerative_davies_bouldin_by_linkage.png
+  results/clustering/agglomerative_pca_cluster_scatter.png
+  results/clustering/agglomerative_silhouette_by_linkage.png
+  results/clustering/agglomerative_tsne_cluster_projection.png
   results/clustering/cluster_profile.png
   results/clustering/cluster_satisfaction_posthoc.png
   results/clustering/data_quality_audit.png
   results/clustering/delay_outlier_boxplots.png
+  results/clustering/dendrogram_average.png
+  results/clustering/dendrogram_complete.png
+  results/clustering/dendrogram_single.png
+  results/clustering/dendrogram_ward.png
   results/clustering/feature_correlation_heatmap.png
   results/clustering/feature_scaling_comparison.png
   results/clustering/kmeans_cluster_distribution.png
+  results/clustering/kmeans_cluster_profile_heatmap.png
   results/clustering/kmeans_marginal_inertia.png
   results/clustering/kmeans_selection_curves.png
   results/clustering/numerical_feature_distributions.png
+  results/clustering/pca_3d_clusters.png
   results/clustering/pca_cluster_scatter.png
   results/clustering/pca_component_analysis.png
+  results/clustering/pca_pc1_pc3_clusters.png
+  results/clustering/pca_pc2_pc3_clusters.png
   results/clustering/service_rating_distributions.png
   results/clustering/skewness_transformation.png
   results/clustering/target_and_categorical_profile.png

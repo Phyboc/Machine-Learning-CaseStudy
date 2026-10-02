@@ -1,0 +1,5 @@
+min_cluster_share_threshold,threshold_label,selected_linkage,selected_k,silhouette_score,davies_bouldin_score,calinski_harabasz_score,minimum_cluster_size,minimum_cluster_percentage,eligible_configurations
+0.0,none,single,2,0.2515,0.6188,2.5,1,0.02,36
+0.005,0.5%,ward,5,0.1023,2.5657,358.7,359,7.18,18
+0.01,1.0%,ward,5,0.1023,2.5657,358.7,359,7.18,18
+0.02,2.0%,ward,5,0.1023,2.5657,358.7,359,7.18,18

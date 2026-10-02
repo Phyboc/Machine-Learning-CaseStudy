@@ -6,10 +6,10 @@ Dataset: Airplane Customer Satisfaction
 --- PIPELINE (FULL DATA vs REPRESENTATIVE SAMPLE) ---
 Original dataset size            : 103,904 rows x 25 columns
 Processed feature matrix         : 103,904 rows x 23 columns (standardised X.csv)
-FULL-DATA model                  : K-Means, k = 3 on all 103,904 rows (Parts I-III, unchanged)
+FULL-DATA model                  : K-Means, k = 3 on all 103,904 rows (Parts I-III)
 REPRESENTATIVE-SAMPLE model      : Agglomerative on 5,000 rows (4.8% of data)
 Dendrogram sample size           : 1,000 rows (drawn from the 5,000-row sample)
-Random state                     : 42 (sampling, dendrogram, PCA, t-SNE, K-Means-sample)
+Random state                     : 42
 Linkage strategies evaluated     : ward, complete, average, single
 k range evaluated                : 2 .. 10
 Configurations evaluated         : 36
@@ -20,23 +20,29 @@ Ineligible (chained) configs     : 18 of 36 (18 eligible for selection)
 --- COMPUTATIONAL JUSTIFICATION ---
 Agglomerative Clustering's generic linkage algorithms are O(N^2) in time and memory.
 On 103,904 rows that is ~5.4 billion pairwise distances; a 5,000-row reproducible
-sample is the standard, documented compromise. K-Means (linear-ish per iteration) is the
-full-data model. The two are never compared as if trained on identical populations.
+sample is the standard, documented compromise.
 
 --- SELECTION RATIONALE (unsupervised evidence only) ---
 Best Silhouette       (higher): ward linkage, k = 5 (0.1023)
 Best Davies-Bouldin   (lower) : ward linkage, k = 9 (2.3176)
 Best Calinski-Harabasz(higher): ward linkage, k = 2 (457.1)
 Three indices agree            : False
-The three indices are NOT collapsed into one metric. A transparent rank consensus
-(mean rank across Silhouette, Davies-Bouldin, Calinski-Harabasz) selects the configuration
-that is simultaneously reasonable on all three indices.
+A transparent rank consensus (mean rank across all three indices) selects the
+configuration that is simultaneously reasonable on all three. Disagreement is reported.
 
 --- SELECTED CONFIGURATION ---
 Selected linkage                 : ward
 Selected k                       : 5
 Mean rank across three indices   : 3.67 (best of 18 eligible)
 Smallest cluster in selection    : 359 rows (7.2%)
+
+--- DEGENERACY-GUARD SENSITIVITY ---
+ min_cluster_share_threshold threshold_label selected_linkage  selected_k  silhouette_score  davies_bouldin_score  calinski_harabasz_score  minimum_cluster_size  minimum_cluster_percentage  eligible_configurations
+                       0.000            none           single           2            0.2515                0.6188                      2.5                     1                        0.02                       36
+                       0.005            0.5%             ward           5            0.1023                2.5657                    358.7                   359                        7.18                       18
+                       0.010            1.0%             ward           5            0.1023                2.5657                    358.7                   359                        7.18                       18
+                       0.020            2.0%             ward           5            0.1023                2.5657                    358.7                   359                        7.18                       18
+If the selected configuration changes across thresholds, that instability is reported here.
 
 --- FINAL AGGLOMERATIVE METRICS (representative sample) ---
 Silhouette Score                 : 0.1023 (5,000-row sample)
@@ -83,17 +89,17 @@ complete 10            0.0501                2.8541                 196.6104    
   single 10            0.0928                0.7214                   2.4144                  1        True
 
 --- CLUSTER DISTRIBUTION (representative sample) ---
-Cluster 0:  1,608 rows (32.16%) | mean member silhouette = 0.1756 | satisfied = 92.91%
-Cluster 1:  1,152 rows (23.04%) | mean member silhouette = 0.0619 | satisfied = 11.20%
-Cluster 2:    817 rows (16.34%) | mean member silhouette = 0.0730 | satisfied = 25.21%
-Cluster 3:    359 rows ( 7.18%) | mean member silhouette = 0.1178 | satisfied = 23.40%
-Cluster 4:  1,064 rows (21.28%) | mean member silhouette = 0.0524 | satisfied = 27.35%
+Cluster 0:  1,608 rows (32.16%) | mean member silhouette = 0.1756 | satisfied(post-hoc) = 92.91%
+Cluster 1:  1,152 rows (23.04%) | mean member silhouette = 0.0619 | satisfied(post-hoc) = 11.20%
+Cluster 2:    817 rows (16.34%) | mean member silhouette = 0.0730 | satisfied(post-hoc) = 25.21%
+Cluster 3:    359 rows ( 7.18%) | mean member silhouette = 0.1178 | satisfied(post-hoc) = 23.40%
+Cluster 4:  1,064 rows (21.28%) | mean member silhouette = 0.0524 | satisfied(post-hoc) = 27.35%
 
---- POST-HOC SATISFACTION (satisfaction excluded from fitting) ---
+--- POST-HOC SATISFACTION (INTERPRETATION ONLY, excluded from fitting/selection) ---
 Satisfaction rate spread across clusters : 81.7 percentage points
 Chi-square test of independence          : chi2 = 2,361.9, dof = 4, p = 0.000e+00
 Cramer's V (effect size)                 : 0.6873
-This is a post-hoc association, not proof of optimal clustering and not causal.
+Post-hoc association only: not proof of optimal clustering and not causal.
 
 --- TOP DISCRIMINATING FEATURES (spread of standardised cluster means) ---
 Class_Eco Plus                       3.866 SD  (Cluster 3 vs Cluster 1)
@@ -107,18 +113,22 @@ Baggage handling                     1.303 SD  (Cluster 0 vs Cluster 4)
 Online boarding                      1.182 SD  (Cluster 0 vs Cluster 1)
 Leg room service                     1.032 SD  (Cluster 0 vs Cluster 4)
 
---- K-MEANS vs AGGLOMERATIVE (SAME 5,000-ROW SAMPLE) ---
+--- K-MEANS vs AGGLOMERATIVE (SAME 5,000-ROW SAMPLE, SUPPLEMENTARY) ---
     algorithm linkage  k  silhouette_score  davies_bouldin_score  calinski_harabasz_score  sample_size
       K-Means     N/A  3            0.1085                2.7523                 536.6625         5000
 Agglomerative    ward  5            0.1023                2.5657                 358.6502         5000
+
+--- CLUSTER SEPARATION NOTE ---
+Silhouettes are modest and the PCA projections overlap, indicating weakly separated /
+overlapping segments rather than sharply isolated natural clusters.
 
 --- METHODOLOGY NOTES ---
 - Unsupervised: no target used during clustering; satisfaction is post-hoc only.
 - No train/test split: no target is predicted; structure is discovered.
 - Standard supervised k-fold CV is not directly applicable;
-  internal indices + linkage comparison + dendrogram + reproducible sampling are used instead.
+  internal indices + linkage comparison + dendrogram + reproducible sampling are used.
 - X.csv is already standardised; standardization is not repeated.
-- Euclidean distance is used (required by Ward, appropriate for standardized features).
+- Euclidean distance (required by Ward, appropriate for standardized features).
 - PCA and t-SNE are visualization only; neither determines k/linkage nor assesses quality.
 - random_state = 42 governs all sampling and stochastic steps.
 
@@ -128,19 +138,10 @@ Agglomerative    ward  5            0.1023                2.5657                
 - Internal indices for bounded ordinal survey data are expected to be modest.
 - Chi-square significance is not a measure of clustering quality.
 
---- AGGREGATED VISUAL/SIDE ARTIFACTS ---
-  results/clustering/agglomerative_silhouette_by_linkage.png
-  results/clustering/agglomerative_davies_bouldin_by_linkage.png
-  results/clustering/agglomerative_calinski_harabasz_by_linkage.png
-  results/clustering/dendrogram_ward.png
-  results/clustering/dendrogram_complete.png
-  results/clustering/dendrogram_average.png
-  results/clustering/dendrogram_single.png
-  results/clustering/agglomerative_cluster_distribution.png
-  results/clustering/agglomerative_cluster_satisfaction_posthoc.png
-  results/clustering/agglomerative_pca_cluster_scatter.png
-  results/clustering/agglomerative_tsne_cluster_projection.png
-  results/clustering/agglomerative_cluster_profile.csv
-  results/clustering/agglomerative_linkage_comparison.csv
-  results/clustering/agglomerative_benchmark_summary.csv
-  results/clustering/kmeans_vs_agglomerative_sample_comparison.csv
+--- NEW DIAGNOSTIC ARTIFACTS ---
+  results/clustering/pca_pc1_pc3_clusters.png
+  results/clustering/pca_pc2_pc3_clusters.png
+  results/clustering/pca_3d_clusters.png
+  results/clustering/kmeans_cluster_profile_heatmap.png
+  results/clustering/agglomerative_cluster_profile_heatmap.png
+  results/clustering/agglomerative_degeneracy_sensitivity.csv
