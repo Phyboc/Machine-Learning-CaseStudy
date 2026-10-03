@@ -17,3 +17,6 @@ Thumbs.db
 _nb_build.py
 _nb_p3.py
 _nbdump/
+
+# Export logs
+results/**/_export_log.txt
