@@ -8,7 +8,7 @@ benchmarking**:
 
 1. **Classification Track** — Binary fraud detection on the *Fraud Detection Bank Dataset* (10 algorithms: 5 classical + 5 ensemble/MLP, with hyperparameter tuning and a champion model selection).
 2. **Regression Track** — Critical temperature prediction on the *UCI Superconductivity Dataset* (10 regressors: linear/regularized baselines through tree ensembles, with cross-validated tuning).
-3. **Clustering Track** — Customer segmentation on the *Airplane Customer Satisfaction Dataset* (K-Means with a four-criterion model-selection sweep, cluster profiling, post-hoc label validation, and PCA / t-SNE projections).
+3. **Clustering Track** — Customer segmentation on the *Airplane Customer Satisfaction Dataset* (K-Means with a four-criterion model-selection sweep, cluster profiling, post-hoc label validation, and PCA / t-SNE projections — extended with a representative-sample **Agglomerative Hierarchical Clustering** study across four linkage strategies and a degeneracy guard).
 
 All trained artifacts and evaluation reports are exported to `results/`.
 
@@ -44,11 +44,11 @@ ML-Case-Study/
 │   │   ├── regression1.ipynb      # Regression track (final): feature engineering + tuned models
 │   │   └── regression.ipynb       # Regression track (earlier iteration)
 │   └── clustering/
-│       └── clustering.ipynb       # Merged clustering track: preprocessing + EDA + K-Means + PCA/t-SNE
+│       └── clustering.ipynb       # Merged clustering track: preprocessing + EDA + K-Means + Agglomerative + PCA/t-SNE
 │
 ├── results/
 │   ├── classification/            # Model reports, benchmark CSVs, and charts
-│   └── clustering/                # Cluster benchmark, evaluation report, and 16 diagnostic figures
+│   └── clustering/                # Two evaluation reports, benchmark CSVs, and 32 diagnostic figures (40 artifacts)
 │
 ├── .gitignore                     # Python / Jupyter artifacts
 ├── README.md                      # Project documentation
@@ -142,9 +142,7 @@ ML-Case-Study/
 
 ## Track 3 — Clustering (Airplane Customer Satisfaction Segmentation)
 
-**Notebook:** `src/clustering/clustering.ipynb` — a single self-contained pipeline that supersedes the two previously
-separate notebooks (`clustering_preprocessing.ipynb` + `clustering.ipynb`), structured like the Classification and
-Regression tracks.
+**Notebook:** `src/clustering/clustering.ipynb` — a single self-contained pipeline in four parts (**Part I** preprocessing & EDA, **Part II** K-Means model selection, **Part III** evaluation/profiling/visualisation, **Part IV** Agglomerative extension) that supersedes the two previously separate notebooks (`clustering_preprocessing.ipynb` + `clustering.ipynb`), structured like the Classification and Regression tracks.
 
 ### Pipeline
 
@@ -159,26 +157,29 @@ Regression tracks.
 9. **Validation** — eight structural gates (numeric, finite, non-constant, no identifier leakage, no target leakage, row-count alignment).
 10. **Model Selection** — K-Means `k = 2…10` scored on **Silhouette**, **Davies-Bouldin**, **Calinski-Harabasz** and inertia, plus a marginal-inertia elbow analysis.
 11. **Deployed Model** — K-Means `k = 3`, with cluster profiling, post-hoc validation, PCA and t-SNE projections, and CSV/report export.
+12. **Part IV — Agglomerative Extension** — Hierarchical clustering on a fixed 5,000-row sample (dendrograms drawn from a 1,000-row sub-sample): all four linkages (ward, complete, average, single) × `k = 2…10` (36 configurations) scored on the same three indices, filtered by a **degeneracy guard** (smallest cluster ≥ 1% of the sample) and selected by a transparent **rank consensus**. K-Means and Agglomerative are finally compared on the *same* 5,000-row sample.
 
-### Model-Selection Sweep (all three mandatory indices, every `k`)
+### Model-Selection Sweep (K-Means, all three mandatory indices, every `k`)
+
+All three indices are computed on the same fixed 10,000-row evaluation sample; inertia is full-data.
 
 | k | Inertia | Silhouette ↑ | Davies-Bouldin ↓ | Calinski-Harabasz ↑ |
 |---|---|---|---|---|
-| 2 | 2,092,596 | **0.1232** | 2.6087 | **14,756.5** |
-| **3** | **1,965,481** | 0.1108 | 2.7640 | 11,215.2 |
-| 4 | 1,861,225 | 0.0909 | 2.6483 | 9,835.5 |
-| 5 | 1,770,992 | 0.0951 | 2.4512 | 9,075.8 |
-| 6 | 1,685,451 | 0.1029 | 2.2626 | 8,683.7 |
-| 7 | 1,616,661 | 0.1096 | **2.1351** | 8,281.1 |
-| 8 | 1,573,018 | 0.1091 | 2.1420 | 7,706.7 |
-| 9 | 1,533,010 | 0.1110 | 2.1425 | 7,258.2 |
-| 10 | 1,501,589 | 0.1063 | 2.2133 | 6,828.3 |
+| 2 | 2,092,596 | **0.1232** | 2.6019 | **1,426.4** |
+| **3** | **1,965,481** | 0.1108 | 2.7456 | 1,088.5 |
+| 4 | 1,861,225 | 0.0909 | 2.6386 | 951.5 |
+| 5 | 1,770,992 | 0.0951 | 2.4485 | 879.0 |
+| 6 | 1,685,451 | 0.1029 | 2.2533 | 844.8 |
+| 7 | 1,616,661 | 0.1096 | **2.1377** | 800.9 |
+| 8 | 1,573,018 | 0.1091 | 2.1565 | 743.8 |
+| 9 | 1,533,010 | 0.1110 | 2.1561 | 700.5 |
+| 10 | 1,501,589 | 0.1063 | 2.2241 | 658.7 |
 
 | Metric | Deployed model (K-Means, k = 3) |
 |---|---|
-| **Silhouette Score** | **0.1108** (reproducible 10,000-customer sample) |
-| **Davies-Bouldin Index** | **2.7640** (full 103,904-customer matrix) |
-| **Calinski-Harabasz Index** | **11,215.2** (full matrix) |
+| **Silhouette Score** | **0.1108** (fixed 10,000-customer evaluation sample) |
+| **Davies-Bouldin Index** | **2.7456** (same 10,000-customer evaluation sample) |
+| **Calinski-Harabasz Index** | **1,088.5** (same 10,000-customer evaluation sample) |
 | Inertia | 1,965,481 |
 
 ### The Three Customer Segments
@@ -196,17 +197,18 @@ Regression tracks.
 - **The post-hoc validation is strong.** Although `satisfaction` was excluded from the feature matrix, the fitted clusters separate it by **58.4 percentage points** (74.4% / 25.4% / 15.9% vs a 43.3% baseline; χ² = 30,060.1, p ≪ 0.001, Cramér's V = 0.538).
 - **The segmentation is about service experience, not demographics.** The strongest discriminators are `Inflight entertainment` (1.71 SD spread), `Seat comfort` (1.66), `Cleanliness` (1.59), `Inflight service` (1.52) and `Baggage handling` (1.49), while `Gate location` (0.06), the delay features (0.12 and 0.16) and `Gender_Male` (0.20) contribute almost nothing — the direct payoff of the `log1p` + scaling treatment, without which delays and age would have dominated the distance metric.
 - **Cluster 0 is the most actionable segment:** its members rate food, seating and cleanliness at or above average yet rate crew and ground service far below it — a service-inconsistency pattern that neither a 2-cluster solution nor any single-variable analysis surfaces.
+- **The Agglomerative extension reaches the same verdict.** Rank consensus selects **ward linkage, `k = 5`** (silhouette 0.1023, Davies-Bouldin 2.5657, Calinski-Harabasz 358.7 on the 5,000-row sample); all 18 chained `single`/`average` configurations are excluded by the degeneracy guard. On the shared sample K-Means (`k = 3`) and Agglomerative score comparably (silhouette 0.1085 vs 0.1023), so no linkage recovers sharply separated structure.
 
 ---
 
 ## Methodology Highlights
 
-- **Reproducibility** — `random_state=42` enforced across splitting, model initialization, CV folds, tuning searches, K-Means initialisation and every sampling step. The clustering pipeline was verified by deleting all 21 output artifacts and re-executing the notebook from scratch: all 21 were regenerated **byte-identical**.
+- **Reproducibility** — `random_state=42` enforced across splitting, model initialization, CV folds, tuning searches, K-Means initialisation and every sampling step. The clustering pipeline was verified by deleting its output artifacts and re-executing the notebook from scratch: the full **40-artifact** set is regenerated deterministically (K-Means init, the 5,000-row Agglomerative sample, the 1,000-row dendrogram sub-sample and every figure are all seeded).
 - **Leakage Prevention** — All dataset-dependent statistics (scaler parameters, transformation eligibility) are fitted on training data only in the supervised tracks; in the clustering track the scaler and imputer are fitted on the full population (there is no held-out target), while the `satisfaction` label is excluded from the feature matrix, asserted absent, and used only for post-hoc validation.
 - **Class-Imbalance Awareness** — Classification reports macro/weighted metrics alongside accuracy; per-class precision/recall for the minority fraud class is analyzed.
 - **Cross-Validation Everywhere** — No single split is trusted: 5-fold CV backs every regression result, and stratified CV gates champion selection in classification.
 - **Evidence-Based Model Selection** — The clustering track reports all three internal indices for every candidate `k` and makes the `k` choice with an explicit, written justification of the trade-off accepted.
-- **Sampling Disclosed Where Necessary** — Silhouette (O(N²)) is computed on a fixed 10,000-customer sample assigned by the full-data model; t-SNE is computed on a fixed 5,000-customer sample. Both are seeded and documented in-notebook, alongside the variance retained.
+- **Sampling Disclosed Where Necessary** — Silhouette (O(N²)) is computed on a fixed 10,000-customer sample assigned by the full-data model; t-SNE is computed on a fixed 5,000-customer sample. The Agglomerative extension is likewise fitted on a fixed 5,000-row sample (O(N²) time and memory) with dendrograms drawn from a 1,000-row sub-sample. All samples are seeded and documented in-notebook, alongside the variance retained.
 
 ---
 
@@ -248,6 +250,24 @@ Regression tracks.
 | `feature_correlation_heatmap.png` | Service-rating gaps and feature correlation structure (EDA) |
 | `skewness_transformation.png` | Skewness before vs after `log1p` compression |
 | `feature_scaling_comparison.png` | Feature ranges before vs after standardisation |
+| `kmeans_cluster_profile_heatmap.png` | K-Means centroid heatmap (standardised feature space) |
+| `pca_pc1_pc3_clusters.png` / `pca_pc2_pc3_clusters.png` | Supplementary PCA views on the PC1–PC3 and PC2–PC3 planes |
+| `pca_3d_clusters.png` | 3-D PCA scatter of the K-Means clusters |
+| `agglomerative_linkage_comparison.csv` | Full linkage × `k` table (36 configurations) with min-cluster size and a `degenerate` flag |
+| `agglomerative_benchmark_summary.csv` | Selected Agglomerative configuration benchmark row |
+| `agglomerative_cluster_profile.csv` | Standardised centroid profile for the selected Agglomerative solution |
+| `agglomerative_degeneracy_sensitivity.csv` | Selected configuration across degeneracy thresholds (0%, 0.5%, 1%, 2%) |
+| `kmeans_vs_agglomerative_sample_comparison.csv` | Head-to-head K-Means vs Agglomerative metrics on the same 5,000-row sample |
+| `agglomerative_silhouette_by_linkage.png` | Silhouette vs `k` for each linkage strategy |
+| `agglomerative_davies_bouldin_by_linkage.png` | Davies-Bouldin vs `k` for each linkage strategy |
+| `agglomerative_calinski_harabasz_by_linkage.png` | Calinski-Harabasz vs `k` for each linkage strategy |
+| `dendrogram_ward.png` / `dendrogram_complete.png` / `dendrogram_average.png` / `dendrogram_single.png` | Truncated dendrograms (1,000-row sub-sample) per linkage |
+| `agglomerative_cluster_distribution.png` | Agglomerative cluster sizes and cohesion |
+| `agglomerative_cluster_profile_heatmap.png` | Agglomerative centroid heatmap |
+| `agglomerative_cluster_satisfaction_posthoc.png` | Post-hoc satisfaction by Agglomerative cluster |
+| `agglomerative_pca_cluster_scatter.png` | PCA-reduced Agglomerative cluster scatter |
+| `agglomerative_tsne_cluster_projection.png` | t-SNE embedding of the Agglomerative clusters |
+| `agglomerative_clustering_report.txt` | Written Agglomerative evaluation report (selection rationale, degeneracy sensitivity, linkage table) |
 
 ---
 
