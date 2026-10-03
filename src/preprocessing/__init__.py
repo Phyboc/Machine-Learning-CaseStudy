@@ -18,6 +18,7 @@ from .builders import (
     regression_preprocessor,
 )
 from .transforms import (
+    ClippedRegressor,
     ColumnKeeper,
     Log1pColumns,
     ThermalRatioAdder,
@@ -35,6 +36,7 @@ __all__ = [
     "prepare_classification",
     "prepare_regression",
     "regression_preprocessor",
+    "ClippedRegressor",
     "ColumnKeeper",
     "Log1pColumns",
     "ThermalRatioAdder",

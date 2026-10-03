@@ -28,12 +28,13 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 from scipy.stats import skew
-from sklearn.base import BaseEstimator, TransformerMixin
+from sklearn.base import BaseEstimator, RegressorMixin, TransformerMixin, clone
 
 __all__ = [
     "Log1pColumns",
     "ColumnKeeper",
     "ThermalRatioAdder",
+    "ClippedRegressor",
     "select_log1p_columns",
 ]
 
@@ -199,3 +200,47 @@ class ThermalRatioAdder(BaseEstimator, TransformerMixin):
         if isinstance(X, pd.DataFrame):
             return X
         return pd.DataFrame(X)
+
+
+class ClippedRegressor(BaseEstimator, RegressorMixin):
+    """Wrap a regressor and clip its predictions to a physical lower bound.
+
+    The regression notebook's ``evaluate_model`` applies
+    ``np.clip(y_pred, 0, None)`` because critical temperature cannot drop below
+    absolute zero.  Baking that step into the serialized artifact keeps GUI
+    inference identical to the notebook without the application having to
+    re-implement the post-processing.
+
+    Parameters
+    ----------
+    estimator:
+        The fitted (or to-be-fitted) base regressor.
+    lower:
+        Lower bound applied to predictions (default ``0.0`` K).
+    """
+
+    def __init__(self, estimator=None, lower: float = 0.0):
+        self.estimator = estimator
+        self.lower = lower
+
+    def fit(self, X, y, **fit_params):  # noqa: N803 - sklearn API
+        self.estimator_ = clone(self.estimator) if self.estimator is not None else None
+        if self.estimator_ is None:
+            raise ValueError("ClippedRegressor requires a base estimator to fit.")
+        self.estimator_.fit(X, y, **fit_params)
+        return self
+
+    def predict(self, X):  # noqa: N803 - sklearn API
+        estimator = getattr(self, "estimator_", None)
+        if estimator is None:
+            estimator = self.estimator
+        return np.clip(estimator.predict(X), self.lower, None)
+
+    @property
+    def feature_importances_(self):
+        estimator = getattr(self, "estimator_", None) or self.estimator
+        return estimator.feature_importances_
+
+    def __sklearn_is_fitted__(self) -> bool:
+        estimator = getattr(self, "estimator_", None)
+        return estimator is not None or self.estimator is not None
