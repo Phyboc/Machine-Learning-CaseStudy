@@ -73,6 +73,7 @@ first two components retain a limited share of total variance.
 --- VISUAL ARTIFACTS ---
   results/clustering/agglomerative_calinski_harabasz_by_linkage.png
   results/clustering/agglomerative_cluster_distribution.png
+  results/clustering/agglomerative_cluster_profile_heatmap.png
   results/clustering/agglomerative_cluster_satisfaction_posthoc.png
   results/clustering/agglomerative_davies_bouldin_by_linkage.png
   results/clustering/agglomerative_pca_cluster_scatter.png
