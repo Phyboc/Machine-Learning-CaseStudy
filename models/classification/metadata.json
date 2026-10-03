@@ -1,0 +1,636 @@
+{
+  "track": "classification",
+  "dataset": "Fraud Detection Bank Dataset",
+  "source_notebook": "src/classification/classification.ipynb",
+  "target": "targets",
+  "target_labels": {
+    "0": "Genuine",
+    "1": "Fraud"
+  },
+  "feature_count": 96,
+  "feature_names": [
+    "col_0",
+    "col_1",
+    "col_2",
+    "col_3",
+    "col_4",
+    "col_5",
+    "col_6",
+    "col_13",
+    "col_14",
+    "col_15",
+    "col_16",
+    "col_17",
+    "col_22",
+    "col_23",
+    "col_24",
+    "col_25",
+    "col_26",
+    "col_27",
+    "col_28",
+    "col_29",
+    "col_30",
+    "col_31",
+    "col_32",
+    "col_33",
+    "col_34",
+    "col_36",
+    "col_37",
+    "col_38",
+    "col_39",
+    "col_40",
+    "col_41",
+    "col_42",
+    "col_43",
+    "col_44",
+    "col_45",
+    "col_46",
+    "col_47",
+    "col_48",
+    "col_49",
+    "col_50",
+    "col_54",
+    "col_55",
+    "col_56",
+    "col_57",
+    "col_58",
+    "col_59",
+    "col_60",
+    "col_61",
+    "col_62",
+    "col_63",
+    "col_64",
+    "col_65",
+    "col_66",
+    "col_67",
+    "col_68",
+    "col_69",
+    "col_72",
+    "col_73",
+    "col_74",
+    "col_75",
+    "col_76",
+    "col_77",
+    "col_78",
+    "col_79",
+    "col_80",
+    "col_81",
+    "col_82",
+    "col_83",
+    "col_84",
+    "col_85",
+    "col_86",
+    "col_87",
+    "col_88",
+    "col_89",
+    "col_90",
+    "col_91",
+    "col_92",
+    "col_93",
+    "col_94",
+    "col_95",
+    "col_96",
+    "col_97",
+    "col_98",
+    "col_99",
+    "col_100",
+    "col_101",
+    "col_102",
+    "col_103",
+    "col_104",
+    "col_105",
+    "col_106",
+    "col_107",
+    "col_108",
+    "col_109",
+    "col_110",
+    "col_111"
+  ],
+  "preprocessing": {
+    "steps": [
+      "log1p (skewed non-negative non-binary columns, fitted on train)",
+      "StandardScaler (fitted on train)"
+    ],
+    "log1p_columns": [
+      "col_0",
+      "col_1",
+      "col_2",
+      "col_3",
+      "col_4",
+      "col_5",
+      "col_17",
+      "col_22",
+      "col_23",
+      "col_24",
+      "col_25",
+      "col_26",
+      "col_27",
+      "col_29",
+      "col_30",
+      "col_31",
+      "col_32",
+      "col_33",
+      "col_34",
+      "col_36",
+      "col_37",
+      "col_38",
+      "col_39",
+      "col_40",
+      "col_41",
+      "col_42",
+      "col_43",
+      "col_44",
+      "col_45",
+      "col_46",
+      "col_47",
+      "col_48",
+      "col_49",
+      "col_50",
+      "col_54",
+      "col_55",
+      "col_56",
+      "col_57",
+      "col_59",
+      "col_60",
+      "col_61",
+      "col_62",
+      "col_63",
+      "col_64",
+      "col_65",
+      "col_66",
+      "col_67",
+      "col_68",
+      "col_69",
+      "col_102",
+      "col_103",
+      "col_110",
+      "col_111"
+    ],
+    "dropped_constant_columns": [
+      "col_8",
+      "col_9",
+      "col_10",
+      "col_11",
+      "col_12",
+      "col_18",
+      "col_19",
+      "col_20",
+      "col_21",
+      "col_35",
+      "col_51",
+      "col_52",
+      "col_53",
+      "col_70",
+      "col_71"
+    ],
+    "dropped_duplicate_columns": [
+      "col_7"
+    ],
+    "dropped_duplicate_rows": 175
+  },
+  "split": {
+    "test_size": 0.2,
+    "random_state": 42,
+    "stratified": true,
+    "train_rows": 16234,
+    "test_rows": 4059
+  },
+  "input_space": "raw feature values (the pipeline applies log1p + scaling)",
+  "trained_on": "raw feature values",
+  "champion": "Gradient Boosting",
+  "models": [
+    {
+      "name": "Logistic Regression",
+      "artifact": "logistic_regression.joblib",
+      "metrics": {
+        "accuracy": 0.9177137225917714,
+        "precision": 0.8785714285714286,
+        "recall": 0.800185873605948,
+        "f1_weighted": 0.9164441996442113,
+        "roc_auc": 0.9579925962112442,
+        "confusion_matrix": [
+          [
+            2864,
+            119
+          ],
+          [
+            215,
+            861
+          ]
+        ]
+      },
+      "probability_kind": "predict_proba",
+      "estimator_class": "LogisticRegression",
+      "params": {
+        "C": 1.0,
+        "class_weight": null,
+        "dual": false,
+        "fit_intercept": true,
+        "intercept_scaling": 1,
+        "l1_ratio": 0.0,
+        "max_iter": 1000,
+        "n_jobs": null,
+        "penalty": "deprecated",
+        "random_state": 42,
+        "solver": "lbfgs",
+        "tol": 0.0001,
+        "verbose": 0,
+        "warm_start": false
+      }
+    },
+    {
+      "name": "Naive Bayes (Gaussian)",
+      "artifact": "gaussian_nb.joblib",
+      "metrics": {
+        "accuracy": 0.56270017245627,
+        "precision": 0.3712707182320442,
+        "recall": 0.9368029739776952,
+        "f1_weighted": 0.5744100505552963,
+        "roc_auc": 0.8654804424576938,
+        "confusion_matrix": [
+          [
+            1276,
+            1707
+          ],
+          [
+            68,
+            1008
+          ]
+        ]
+      },
+      "probability_kind": "predict_proba",
+      "estimator_class": "GaussianNB",
+      "params": {
+        "priors": null,
+        "var_smoothing": 1e-09
+      }
+    },
+    {
+      "name": "Decision Tree",
+      "artifact": "decision_tree.joblib",
+      "metrics": {
+        "accuracy": 0.9164818920916482,
+        "precision": 0.8447146866230122,
+        "recall": 0.8392193308550185,
+        "f1_weighted": 0.9163945545810278,
+        "roc_auc": 0.9505305467039369,
+        "confusion_matrix": [
+          [
+            2817,
+            166
+          ],
+          [
+            173,
+            903
+          ]
+        ]
+      },
+      "probability_kind": "predict_proba",
+      "estimator_class": "DecisionTreeClassifier",
+      "params": {
+        "ccp_alpha": 0.0,
+        "class_weight": null,
+        "criterion": "gini",
+        "max_depth": 7,
+        "max_features": null,
+        "max_leaf_nodes": null,
+        "min_impurity_decrease": 0.0,
+        "min_samples_leaf": 1,
+        "min_samples_split": 2,
+        "min_weight_fraction_leaf": 0.0,
+        "monotonic_cst": null,
+        "random_state": 42,
+        "splitter": "best"
+      }
+    },
+    {
+      "name": "Support Vector Machine",
+      "artifact": "svm.joblib",
+      "metrics": {
+        "accuracy": 0.9255974377925598,
+        "precision": 0.8885542168674698,
+        "recall": 0.8224907063197026,
+        "f1_weighted": 0.9246533381095235,
+        "roc_auc": 0.9687231673410791,
+        "confusion_matrix": [
+          [
+            2872,
+            111
+          ],
+          [
+            191,
+            885
+          ]
+        ]
+      },
+      "probability_kind": "decision_function_normalized",
+      "estimator_class": "SVC",
+      "params": {
+        "C": 1.0,
+        "break_ties": false,
+        "cache_size": 200,
+        "class_weight": null,
+        "coef0": 0.0,
+        "decision_function_shape": "ovr",
+        "degree": 3,
+        "gamma": "scale",
+        "kernel": "rbf",
+        "max_iter": -1,
+        "probability": false,
+        "random_state": 42,
+        "shrinking": true,
+        "tol": 0.001,
+        "verbose": false
+      }
+    },
+    {
+      "name": "Random Forest",
+      "artifact": "random_forest.joblib",
+      "metrics": {
+        "accuracy": 0.9219019462921902,
+        "precision": 0.9102702702702703,
+        "recall": 0.7825278810408922,
+        "f1_weighted": 0.9199191551984343,
+        "roc_auc": 0.9674831791552378,
+        "confusion_matrix": [
+          [
+            2900,
+            83
+          ],
+          [
+            234,
+            842
+          ]
+        ]
+      },
+      "probability_kind": "predict_proba",
+      "estimator_class": "RandomForestClassifier",
+      "params": {
+        "bootstrap": true,
+        "ccp_alpha": 0.0,
+        "class_weight": null,
+        "criterion": "gini",
+        "max_depth": 12,
+        "max_features": "sqrt",
+        "max_leaf_nodes": null,
+        "max_samples": null,
+        "min_impurity_decrease": 0.0,
+        "min_samples_leaf": 1,
+        "min_samples_split": 2,
+        "min_weight_fraction_leaf": 0.0,
+        "monotonic_cst": null,
+        "n_estimators": 100,
+        "n_jobs": -1,
+        "oob_score": false,
+        "random_state": 42,
+        "verbose": 0,
+        "warm_start": false
+      }
+    },
+    {
+      "name": "AdaBoost",
+      "artifact": "adaboost.joblib",
+      "metrics": {
+        "accuracy": 0.8810051736881005,
+        "precision": 0.8602673147023087,
+        "recall": 0.6579925650557621,
+        "f1_weighted": 0.8754989122208658,
+        "roc_auc": 0.9188150448576631,
+        "confusion_matrix": [
+          [
+            2868,
+            115
+          ],
+          [
+            368,
+            708
+          ]
+        ]
+      },
+      "probability_kind": "predict_proba",
+      "estimator_class": "AdaBoostClassifier",
+      "params": {
+        "estimator": null,
+        "learning_rate": 0.1,
+        "n_estimators": 100,
+        "random_state": 42
+      }
+    },
+    {
+      "name": "Gradient Boosting",
+      "artifact": "gradient_boosting.joblib",
+      "metrics": {
+        "accuracy": 0.9307711258930771,
+        "precision": 0.8833172613307618,
+        "recall": 0.8513011152416357,
+        "f1_weighted": 0.9303570478494629,
+        "roc_auc": 0.9760138616970765,
+        "confusion_matrix": [
+          [
+            2862,
+            121
+          ],
+          [
+            160,
+            916
+          ]
+        ]
+      },
+      "probability_kind": "predict_proba",
+      "estimator_class": "GradientBoostingClassifier",
+      "params": {
+        "ccp_alpha": 0.0,
+        "criterion": "deprecated",
+        "init": null,
+        "learning_rate": 0.1,
+        "loss": "log_loss",
+        "max_depth": 4,
+        "max_features": null,
+        "max_leaf_nodes": null,
+        "min_impurity_decrease": 0.0,
+        "min_samples_leaf": 1,
+        "min_samples_split": 2,
+        "min_weight_fraction_leaf": 0.0,
+        "n_estimators": 100,
+        "n_iter_no_change": null,
+        "random_state": 42,
+        "subsample": 1.0,
+        "tol": 0.0001,
+        "validation_fraction": 0.1,
+        "verbose": 0,
+        "warm_start": false
+      }
+    },
+    {
+      "name": "Bagging (Decision Tree)",
+      "artifact": "bagging.joblib",
+      "metrics": {
+        "accuracy": 0.9214092140921409,
+        "precision": 0.8527493010251631,
+        "recall": 0.8503717472118959,
+        "f1_weighted": 0.9213741075335026,
+        "roc_auc": 0.9693849097799551,
+        "confusion_matrix": [
+          [
+            2825,
+            158
+          ],
+          [
+            161,
+            915
+          ]
+        ]
+      },
+      "probability_kind": "predict_proba",
+      "estimator_class": "BaggingClassifier",
+      "params": {
+        "bootstrap": true,
+        "bootstrap_features": false,
+        "estimator__ccp_alpha": 0.0,
+        "estimator__class_weight": null,
+        "estimator__criterion": "gini",
+        "estimator__max_depth": 8,
+        "estimator__max_features": null,
+        "estimator__max_leaf_nodes": null,
+        "estimator__min_impurity_decrease": 0.0,
+        "estimator__min_samples_leaf": 1,
+        "estimator__min_samples_split": 2,
+        "estimator__min_weight_fraction_leaf": 0.0,
+        "estimator__monotonic_cst": null,
+        "estimator__random_state": 42,
+        "estimator__splitter": "best",
+        "estimator": "<DecisionTreeClassifier>",
+        "max_features": 1.0,
+        "max_samples": null,
+        "n_estimators": 50,
+        "n_jobs": -1,
+        "oob_score": false,
+        "random_state": 42,
+        "verbose": 0,
+        "warm_start": false
+      }
+    },
+    {
+      "name": "MLP Neural Network",
+      "artifact": "mlp.joblib",
+      "metrics": {
+        "accuracy": 0.9093372751909338,
+        "precision": 0.8365019011406845,
+        "recall": 0.8178438661710037,
+        "f1_weighted": 0.909007647387189,
+        "roc_auc": 0.9469747715368502,
+        "confusion_matrix": [
+          [
+            2811,
+            172
+          ],
+          [
+            196,
+            880
+          ]
+        ]
+      },
+      "probability_kind": "predict_proba",
+      "estimator_class": "MLPClassifier",
+      "params": {
+        "activation": "relu",
+        "alpha": 0.0001,
+        "batch_size": "auto",
+        "beta_1": 0.9,
+        "beta_2": 0.999,
+        "early_stopping": false,
+        "epsilon": 1e-08,
+        "hidden_layer_sizes": [
+          64,
+          32
+        ],
+        "learning_rate": "constant",
+        "learning_rate_init": 0.001,
+        "max_fun": 15000,
+        "max_iter": 400,
+        "momentum": 0.9,
+        "n_iter_no_change": 10,
+        "nesterovs_momentum": true,
+        "power_t": 0.5,
+        "random_state": 42,
+        "shuffle": true,
+        "solver": "adam",
+        "tol": 0.0001,
+        "validation_fraction": 0.1,
+        "verbose": false,
+        "warm_start": false
+      }
+    },
+    {
+      "name": "K-Nearest Neighbors",
+      "artifact": "knn_classifier.joblib",
+      "metrics": {
+        "accuracy": 0.9103227395910323,
+        "precision": 0.8510848126232742,
+        "recall": 0.8020446096654275,
+        "f1_weighted": 0.9094537787451389,
+        "roc_auc": 0.9507709112480013,
+        "confusion_matrix": [
+          [
+            2832,
+            151
+          ],
+          [
+            213,
+            863
+          ]
+        ]
+      },
+      "probability_kind": "predict_proba",
+      "estimator_class": "KNeighborsClassifier",
+      "params": {
+        "algorithm": "auto",
+        "leaf_size": 30,
+        "metric": "minkowski",
+        "metric_params": null,
+        "n_jobs": null,
+        "n_neighbors": 11,
+        "p": 2,
+        "weights": "uniform"
+      }
+    },
+    {
+      "name": "Gradient Boosting (Hyperparameter Tuned)",
+      "artifact": "champion_gradient_boosting.joblib",
+      "metrics": {
+        "accuracy": 0.9349593495934959,
+        "precision": 0.8896353166986565,
+        "recall": 0.8615241635687733,
+        "f1_weighted": 0.934621586555809,
+        "roc_auc": 0.9779366222721818,
+        "confusion_matrix": [
+          [
+            2868,
+            115
+          ],
+          [
+            149,
+            927
+          ]
+        ]
+      },
+      "probability_kind": "predict_proba",
+      "estimator_class": "GradientBoostingClassifier",
+      "params": {
+        "learning_rate": 0.1,
+        "max_depth": 5,
+        "n_estimators": 150
+      },
+      "is_champion": true
+    }
+  ],
+  "package_versions": {
+    "python": "3.12.10",
+    "scikit_learn": "1.9.0",
+    "numpy": "2.5.1",
+    "pandas": "3.0.5",
+    "joblib": "1.4.2"
+  },
+  "exported_at_utc": "2026-10-03T11:22:50+00:00",
+  "artifact_version": 1
+}
