@@ -33,7 +33,7 @@ from ui import (  # noqa: E402
     track_metrics_block,
 )
 
-setup_page("Classification — Fraud Detection", "🚨")
+setup_page("Classification — Fraud Detection")
 repo_note()
 
 if not artifacts_present("classification"):

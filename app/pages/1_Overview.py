@@ -13,7 +13,7 @@ import streamlit as st  # noqa: E402
 from core.loaders import cached_metadata, model_entries  # noqa: E402
 from ui import repo_note, setup_page  # noqa: E402
 
-setup_page("Project Overview", "📋")
+setup_page("Project Overview")
 repo_note()
 
 st.markdown(
@@ -78,10 +78,10 @@ with left:
         table = metrics_table("classification")
         top = table.sort_values("roc_auc", ascending=False).iloc[0]
         st.metric(top["Model"], f"{top['roc_auc']:.4f} ROC-AUC", f"{top['accuracy']:.4f} accuracy")
-        st.caption(
-            "Ranking reflects the notebooks' own comparison; "
-            "'top' here is simply the highest persisted ROC-AUC, not a claim of general superiority."
-        )
+        # st.caption(
+        #     "Ranking reflects the notebooks' own comparison; "
+        #     "'top' here is simply the highest persisted ROC-AUC, not a claim of general superiority."
+        # )
     except Exception as exc:
         st.warning(f"Unavailable: {exc}")
 
@@ -93,7 +93,7 @@ with right:
         table = metrics_table("regression")
         top = table.sort_values("r2", ascending=False).iloc[0]
         st.metric(top["Model"], f"R² {top['r2']:.4f}", f"RMSE {top['rmse']:.2f} K")
-        st.caption("Same caveat: the highest persisted test R², nothing more.")
+        # st.caption("Same caveat: the highest persisted test R², nothing more.")
     except Exception as exc:
         st.warning(f"Unavailable: {exc}")
 

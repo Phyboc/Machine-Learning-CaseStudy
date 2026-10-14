@@ -13,7 +13,7 @@ import streamlit as st  # noqa: E402
 from core.loaders import load_table, load_text, result_files_by_kind  # noqa: E402
 from ui import repo_note, result_gallery, setup_page  # noqa: E402
 
-setup_page("Visualizations", "🖼️")
+setup_page("Visualizations")
 repo_note()
 
 st.caption(
@@ -22,13 +22,13 @@ st.caption(
 )
 
 tab_clf, tab_reg, tab_clu, tab_tables = st.tabs(
-    ["🚨 Classification", "🌡️ Regression", "🧩 Clustering", "📄 Tables & text"]
+    ["Classification", "Regression", "Clustering", "Tables & text"]
 )
 
 TRACKS = {
-    "classification": ("🚨 Classification", tab_clf),
-    "regression": ("🌡️ Regression", tab_reg),
-    "clustering": ("🧩 Clustering", tab_clu),
+    "classification": ("Classification", tab_clf),
+    "regression": ("Regression", tab_reg),
+    "clustering": ("Clustering", tab_clu),
 }
 
 for track, (label, tab) in TRACKS.items():

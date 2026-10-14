@@ -34,7 +34,7 @@ from ui import (  # noqa: E402
     track_metrics_block,
 )
 
-setup_page("Regression — Critical Temperature", "🌡️")
+setup_page("Regression — Critical Temperature")
 repo_note()
 
 if not artifacts_present("regression"):

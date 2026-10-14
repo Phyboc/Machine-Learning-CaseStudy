@@ -34,14 +34,14 @@ ensure_src_on_path()
 
 st.set_page_config(
     page_title="ML Case Study — GUI",
-    page_icon="🧪",
+    # page_icon="🧪",
     layout="wide",
     initial_sidebar_state="expanded",
 )
 
 from ui import repo_note  # noqa: E402
 
-st.title("🧪 Machine Learning Case Study — Interactive GUI")
+st.title("Machine Learning Case Study — Interactive GUI")
 repo_note()
 
 st.markdown(

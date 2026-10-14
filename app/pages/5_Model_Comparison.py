@@ -15,7 +15,7 @@ from core.figures import CLASSIFICATION_METRICS, REGRESSION_METRICS, metric_bar_
 from core.loaders import cached_metadata, metrics_table, model_entries  # noqa: E402
 from ui import repo_note, setup_page  # noqa: E402
 
-setup_page("Model Comparison", "⚖️")
+setup_page("Model Comparison")
 repo_note()
 
 st.caption(
@@ -23,7 +23,7 @@ st.caption(
     "`models/<track>/metadata.json`. Nothing is recomputed here."
 )
 
-tab_clf, tab_reg = st.tabs(["🚨 Classification", "🌡️ Regression"])
+tab_clf, tab_reg = st.tabs(["Classification", "Regression"])
 
 with tab_clf:
     try:

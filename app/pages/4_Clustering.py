@@ -26,7 +26,7 @@ from core.loaders import (  # noqa: E402
 from core.paths import CLUSTERING_RESULTS_DIR  # noqa: E402
 from ui import repo_note, result_gallery, setup_page  # noqa: E402
 
-setup_page("Clustering — Customer Segmentation", "🧩")
+setup_page("Clustering — Customer Segmentation")
 repo_note()
 
 st.info(
