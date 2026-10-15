@@ -1,0 +1,324 @@
+{
+  "track": "regression",
+  "dataset": "UCI Superconductivity (train.csv)",
+  "source_notebook": "src/regression/regression1.ipynb",
+  "target": "critical_temp",
+  "target_units": "Kelvin",
+  "prediction_clip": {
+    "lower": 0.0,
+    "note": "predictions clipped at 0 K as in the notebook"
+  },
+  "feature_count": 58,
+  "feature_names": [
+    "number_of_elements",
+    "mean_atomic_mass",
+    "wtd_mean_atomic_mass",
+    "gmean_atomic_mass",
+    "entropy_atomic_mass",
+    "wtd_entropy_atomic_mass",
+    "range_atomic_mass",
+    "wtd_range_atomic_mass",
+    "wtd_std_atomic_mass",
+    "mean_fie",
+    "wtd_mean_fie",
+    "wtd_entropy_fie",
+    "range_fie",
+    "wtd_range_fie",
+    "wtd_std_fie",
+    "mean_atomic_radius",
+    "wtd_mean_atomic_radius",
+    "gmean_atomic_radius",
+    "range_atomic_radius",
+    "wtd_range_atomic_radius",
+    "mean_Density",
+    "wtd_mean_Density",
+    "gmean_Density",
+    "entropy_Density",
+    "wtd_entropy_Density",
+    "range_Density",
+    "wtd_range_Density",
+    "wtd_std_Density",
+    "mean_ElectronAffinity",
+    "wtd_mean_ElectronAffinity",
+    "gmean_ElectronAffinity",
+    "wtd_gmean_ElectronAffinity",
+    "entropy_ElectronAffinity",
+    "wtd_entropy_ElectronAffinity",
+    "range_ElectronAffinity",
+    "wtd_range_ElectronAffinity",
+    "wtd_std_ElectronAffinity",
+    "mean_FusionHeat",
+    "wtd_mean_FusionHeat",
+    "gmean_FusionHeat",
+    "entropy_FusionHeat",
+    "wtd_entropy_FusionHeat",
+    "range_FusionHeat",
+    "wtd_range_FusionHeat",
+    "wtd_std_FusionHeat",
+    "mean_ThermalConductivity",
+    "wtd_mean_ThermalConductivity",
+    "gmean_ThermalConductivity",
+    "wtd_gmean_ThermalConductivity",
+    "entropy_ThermalConductivity",
+    "wtd_entropy_ThermalConductivity",
+    "range_ThermalConductivity",
+    "wtd_range_ThermalConductivity",
+    "mean_Valence",
+    "wtd_mean_Valence",
+    "range_Valence",
+    "wtd_range_Valence",
+    "wtd_std_Valence"
+  ],
+  "engineered_features": [
+    "thermal_to_mass_ratio"
+  ],
+  "preprocessing": {
+    "steps": [
+      "drop duplicate rows",
+      "drop features with |corr| > 0.95",
+      "add thermal_to_mass_ratio",
+      "StandardScaler (fitted on train)"
+    ],
+    "dropped_correlated_features": [
+      "wtd_gmean_atomic_mass",
+      "std_atomic_mass",
+      "gmean_fie",
+      "wtd_gmean_fie",
+      "entropy_fie",
+      "std_fie",
+      "wtd_gmean_atomic_radius",
+      "entropy_atomic_radius",
+      "wtd_entropy_atomic_radius",
+      "std_atomic_radius",
+      "wtd_std_atomic_radius",
+      "wtd_gmean_Density",
+      "std_Density",
+      "std_ElectronAffinity",
+      "wtd_gmean_FusionHeat",
+      "std_FusionHeat",
+      "std_ThermalConductivity",
+      "wtd_std_ThermalConductivity",
+      "gmean_Valence",
+      "wtd_gmean_Valence",
+      "entropy_Valence",
+      "wtd_entropy_Valence",
+      "std_Valence"
+    ],
+    "dropped_duplicate_rows": 66
+  },
+  "split": {
+    "test_size": 0.2,
+    "random_state": 42,
+    "train_rows": 16957,
+    "test_rows": 4240
+  },
+  "input_space": "raw feature values (the pipeline applies the correlation filter, engineering and scaling)",
+  "trained_on": "raw feature values",
+  "highest_test_r2_model": "Random Forest",
+  "prediction_clip_lower": 0.0,
+  "prediction_pipeline": "prep (correlation filter + thermal_to_mass_ratio + StandardScaler) -> ClippedRegressor(estimator, lower=0)",
+  "models": [
+    {
+      "name": "Linear Regression",
+      "artifact": "linear_regression.joblib",
+      "metrics": {
+        "r2": 0.7152984802024802,
+        "rmse": 18.30670445833059,
+        "mae": 13.548100003715255,
+        "cv_r2": 0.7085269670448391,
+        "cv_r2_std": 0.009081504237580197
+      },
+      "params": {
+        "copy_X": true,
+        "fit_intercept": true,
+        "n_jobs": null,
+        "positive": false,
+        "tol": 1e-06
+      },
+      "estimator_class": "LinearRegression",
+      "probability_kind": "n/a"
+    },
+    {
+      "name": "Ridge",
+      "artifact": "ridge.joblib",
+      "metrics": {
+        "r2": 0.7153896038426393,
+        "rmse": 18.303774535346594,
+        "mae": 13.548819661422732,
+        "cv_r2": 0.7085315151161832,
+        "cv_r2_std": 0.00907470407432837
+      },
+      "params": {
+        "alpha": 10.0
+      },
+      "estimator_class": "Ridge",
+      "probability_kind": "n/a"
+    },
+    {
+      "name": "Lasso",
+      "artifact": "lasso.joblib",
+      "metrics": {
+        "r2": 0.7152572555827875,
+        "rmse": 18.308029810601408,
+        "mae": 13.55387329147968,
+        "cv_r2": 0.7082575716519923,
+        "cv_r2_std": 0.00902845707629971
+      },
+      "params": {
+        "alpha": 0.01
+      },
+      "estimator_class": "Lasso",
+      "probability_kind": "n/a"
+    },
+    {
+      "name": "ElasticNet",
+      "artifact": "elasticnet.joblib",
+      "metrics": {
+        "r2": 0.7153869914295101,
+        "rmse": 18.303858539500744,
+        "mae": 13.548630328917358,
+        "cv_r2": 0.7085408500402421,
+        "cv_r2_std": 0.009075502872968412
+      },
+      "params": {
+        "alpha": 0.001,
+        "l1_ratio": 0.5
+      },
+      "estimator_class": "ElasticNet",
+      "probability_kind": "n/a"
+    },
+    {
+      "name": "Polynomial Regression (Degree 2)",
+      "artifact": "polynomial_regression.joblib",
+      "metrics": {
+        "r2": 0.8411170618967797,
+        "rmse": 13.67583677685201,
+        "mae": 9.01679951615185,
+        "cv_r2": 0.8096091593825413,
+        "cv_r2_std": 0.013673554312486515
+      },
+      "params": {
+        "memory": null,
+        "steps": [
+          [
+            "poly",
+            "<PolynomialFeatures>"
+          ],
+          [
+            "model",
+            "<LinearRegression>"
+          ]
+        ],
+        "transform_input": null,
+        "verbose": false,
+        "poly": "<PolynomialFeatures>",
+        "model": "<LinearRegression>",
+        "poly__degree": 2,
+        "poly__include_bias": false,
+        "poly__interaction_only": false,
+        "poly__order": "C",
+        "model__copy_X": true,
+        "model__fit_intercept": true,
+        "model__n_jobs": null,
+        "model__positive": false,
+        "model__tol": 1e-06
+      },
+      "estimator_class": "LinearRegression",
+      "probability_kind": "n/a"
+    },
+    {
+      "name": "Decision Tree",
+      "artifact": "decision_tree.joblib",
+      "metrics": {
+        "r2": 0.8782697014924659,
+        "rmse": 11.97056422624072,
+        "mae": 6.3474946528124745,
+        "cv_r2": 0.8663373220371307,
+        "cv_r2_std": 0.00947594178582619
+      },
+      "params": {
+        "max_depth": 15
+      },
+      "estimator_class": "DecisionTreeRegressor",
+      "probability_kind": "n/a"
+    },
+    {
+      "name": "Random Forest",
+      "artifact": "random_forest.joblib",
+      "metrics": {
+        "r2": 0.9207524979239574,
+        "rmse": 9.658464070768709,
+        "mae": 5.620927444631622,
+        "cv_r2": 0.9165753925030543,
+        "cv_r2_std": 0.004908046045955497
+      },
+      "params": {
+        "n_estimators": 100,
+        "max_depth": 15,
+        "max_features": "sqrt"
+      },
+      "estimator_class": "RandomForestRegressor",
+      "probability_kind": "n/a"
+    },
+    {
+      "name": "Gradient Boosting",
+      "artifact": "gradient_boosting.joblib",
+      "metrics": {
+        "r2": 0.9192549446957092,
+        "rmse": 9.749295764732103,
+        "mae": 5.730993486250478,
+        "cv_r2": 0.9132753024409688,
+        "cv_r2_std": 0.005693027525961989
+      },
+      "params": {
+        "learning_rate": 0.2,
+        "max_iter": 150,
+        "min_samples_leaf": 20
+      },
+      "estimator_class": "HistGradientBoostingRegressor",
+      "probability_kind": "n/a"
+    },
+    {
+      "name": "Support Vector Regressor",
+      "artifact": "svr.joblib",
+      "metrics": {
+        "r2": 0.8494935129871941,
+        "rmse": 13.310454558907729,
+        "mae": 7.670331040728704,
+        "cv_r2": 0.8437182547605475,
+        "cv_r2_std": 0.0082886216884232
+      },
+      "params": {
+        "C": 100.0,
+        "kernel": "rbf"
+      },
+      "estimator_class": "SVR",
+      "probability_kind": "n/a"
+    },
+    {
+      "name": "K-Nearest Neighbors",
+      "artifact": "knn_regressor.joblib",
+      "metrics": {
+        "r2": 0.9073714287555616,
+        "rmse": 10.442097891709365,
+        "mae": 5.61139052672956,
+        "cv_r2": 0.898563819996452,
+        "cv_r2_std": 0.004752862081062123
+      },
+      "params": {
+        "n_neighbors": 3
+      },
+      "estimator_class": "KNeighborsRegressor",
+      "probability_kind": "n/a"
+    }
+  ],
+  "package_versions": {
+    "python": "3.12.10",
+    "scikit_learn": "1.9.0",
+    "numpy": "2.5.1",
+    "pandas": "3.0.5",
+    "joblib": "1.4.2"
+  },
+  "exported_at_utc": "2026-10-03T12:29:34+00:00",
+  "artifact_version": 1
+}

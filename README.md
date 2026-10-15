@@ -46,11 +46,45 @@ ML-Case-Study/
 │   └── clustering/
 │       └── clustering.ipynb       # Merged clustering track: preprocessing + EDA + K-Means + Agglomerative + PCA/t-SNE
 │
+├── models/                        # Saved inference artifacts (joblib), one per trained model
+│   ├── classification/
+│   │   ├── logistic_regression.joblib   # Each file is a complete fitted Pipeline:
+│   │   ├── knn_classifier.joblib        #   log1p -> StandardScaler -> estimator
+│   │   ├── gaussian_nb.joblib
+│   │   ├── decision_tree.joblib
+│   │   ├── svm.joblib
+│   │   ├── random_forest.joblib
+│   │   ├── adaboost.joblib
+│   │   ├── gradient_boosting.joblib
+│   │   ├── bagging.joblib
+│   │   ├── mlp.joblib
+│   │   ├── champion_gradient_boosting.joblib  # Hyperparameter-tuned champion
+│   │   └── metadata.json                # Feature order, preprocessing, test-set metrics
+│   └── regression/
+│   │   ├── ...one per model + metadata.json
+│   └── ...
+│
+├── app/                           # Streamlit GUI / deployment layer
+│   ├── main.py                    # Entry point: `streamlit run app/main.py`
+│   ├── ui.py                      # Shared input/metric/gallery widgets
+│   ├── core/                      # paths · metadata · schemas · loaders · inference · figures
+│   └── pages/                     # 1 Overview · 2 Classification · 3 Regression ·
+│                                  # 4 Clustering · 5 Model Comparison · 6 Visualizations
+│
+├── scripts/                       # Reproducibility: regenerate artifacts from the notebooks
+│   ├── export_classification_models.py
+│   ├── export_regression_models.py
+│   └── export_regression_figures.py
+│
+├── tests/                         # pytest suite for artifacts, schemas and inference
+│
 ├── results/
 │   ├── classification/            # Model reports, benchmark CSVs, and charts
+│   ├── regression/                # Leaderboard CSV + predicted-vs-actual, residual,
+│   │                              # feature-importance and comparison figures
 │   └── clustering/                # Two evaluation reports, benchmark CSVs, and 32 diagnostic figures (40 artifacts)
 │
-├── .gitignore                     # Python / Jupyter artifacts
+├── .gitignore
 ├── README.md                      # Project documentation
 └── requirements.txt               # Environment dependencies
 ```
@@ -305,10 +339,139 @@ Or open the notebooks in Jupyter Notebook / VS Code and run all cells.
 
 ---
 
+## Interactive GUI (Streamlit)
+
+The `app/` directory is a **deployment/inference layer** over the work above — not a
+second ML project. It loads the saved artifacts and the persisted evaluation results
+and adds a web interface for running real inputs through the trained models.
+
+### Launch
+
+```bash
+streamlit run app/main.py
+```
+
+Run it from the repository root. Paths are resolved from the application files, so the
+app does not depend on the working directory.
+
+### Pages
+
+| Page | Purpose |
+|---|---|
+| **Overview** | Datasets, the three tracks, headline results and methodology summaries |
+| **Classification** | Enter one sample or upload a CSV → run it through **all 11** classifiers and compare predictions |
+| **Regression** | Enter one sample or upload a CSV → predict `critical_temp` (K) with **all 10** regressors |
+| **Clustering** | Read-only exploration of the saved segmentation analysis (no fake prediction form) |
+| **Model Comparison** | Test-set metrics side by side, with per-metric ranking charts |
+| **Visualizations** | Gallery of the result figures the notebooks already produced |
+
+### Model artifacts
+
+Each `models/<track>/*.joblib` file is a **complete fitted `Pipeline`**, so
+inference preprocessing cannot drift from training:
+
+```python
+import joblib
+
+pipeline = joblib.load("models/regression/random_forest.joblib")
+pipeline.predict(raw_feature_frame)   # preprocessing is applied for you
+```
+
+- **Classification:** `log1p` (skewed columns) → `StandardScaler` → estimator.
+  The target `targets` is never an input feature.
+- **Regression:** correlation filter → `thermal_to_mass_ratio` engineering →
+  `StandardScaler` → estimator, wrapped so predictions are clipped at **0 K**
+  (critical temperature cannot be negative). The target `critical_temp` is never
+  an input feature.
+- `metadata.json` records the feature names and order, the exact preprocessing, the
+  train/test split and each model's hold-out metrics.
+
+Artifacts are regenerated from the notebooks (without changing the methodology) with:
+
+```bash
+python scripts/export_classification_models.py
+python scripts/export_regression_models.py
+python scripts/export_regression_figures.py
+```
+
+### Classification prediction
+
+The page runs the **same input** through every classifier and shows a comparison
+table. A probability is only displayed when the estimator genuinely supports
+`predict_proba`; the SVM is trained with `probability=False`, so it reports its raw
+decision margin instead — a decision score is never presented as a probability.
+
+```
+| Model               | Prediction | Probability |
+|---------------------|------------|-------------|
+| Logistic Regression | 0          | 0.8213      |
+| K-Nearest Neighbors | 0          | 0.7409      |
+| Support Vector Machine | 0       | — (decision score shown instead) |
+```
+
+### Regression prediction
+
+The page returns `critical_temp` in **Kelvin** from all ten regressors, including the
+engineered `thermal_to_mass_ratio` feature. Predictions already carry the `>= 0 K` clip.
+
+### Clustering explorer
+
+A **read-only** view of the saved segmentation analysis: the model-selection sweep,
+linkage comparison, degeneracy sensitivity, cluster profiles and the post-hoc
+satisfaction breakdown. It deliberately offers **no prediction form**, because
+clustering is unsupervised and there is no correct cluster for a new sample. It also
+does not re-run the algorithms — every figure and table is loaded from
+`results/clustering/`. Satisfaction stays out of fitting and selection, and the
+analysis' own finding that separation is **weak** is reproduced rather than overstated.
+
+### Model comparison
+
+Side-by-side test-set metrics for every persisted model:
+
+- **Classification:** Accuracy, Precision, Recall, F1 (weighted), ROC-AUC.
+- **Regression:** R², RMSE, MAE, 5-fold CV R².
+
+Each metric also gets a ranking chart. All values are read from `metadata.json`.
+
+### Visualization gallery
+
+Groups the images, summary tables and reports already in `results/` by track. The app
+displays them as saved and never regenerates plots at startup.
+
+### What the app does *not* do
+
+It does **not** train, tune, re-fit or cross-validate anything, and it does not execute
+the notebooks or rebuild the datasets. It loads artifacts and results, then performs
+inference. This is enforced by a test that fails if training-like calls appear in `app/`.
+
+### Tests
+
+```bash
+python -m pytest tests/ -q
+```
+
+Covers artifact loading for every model in both tracks, metadata validity, schema and
+feature-order correctness, target-column rejection, CSV validation, per-track inference,
+reproduction of the persisted metrics, and the no-training guarantee.
+
+### GUI limitations
+
+- Metrics under *test-set performance* describe the models on the hold-out split, not
+  the sample you entered.
+- Single-sample input is a *what-if* probe. The classification dataset has 96 features;
+  arbitrary edits can produce feature combinations that never occur in the data.
+- The SVM exposes no calibrated probability; its margin is shown as a decision score.
+- Cluster separation is weak, as documented in the clustering analysis.
+
+---
+
 ## Dependencies
 
 - Python ≥ 3.10
 - pandas ≥ 2.0, numpy ≥ 1.24
 - scikit-learn ≥ 1.2, scipy ≥ 1.10
+- joblib ≥ 1.2
 - matplotlib ≥ 3.7, seaborn ≥ 0.12
 - jupyter ≥ 1.0
+- streamlit ≥ 1.30 (GUI)
+- pytest ≥ 7.4 (tests)
