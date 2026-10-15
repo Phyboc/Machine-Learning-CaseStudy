@@ -464,6 +464,8 @@ reproduction of the persisted metrics, and the no-training guarantee.
 - Cluster separation is weak, as documented in the clustering analysis.
 
 ---
+### Deployed in Streamlit
+https://machine-learning-casestudy-c2hrudjn2vlgwjzeqbs4b5.streamlit.app/
 
 ## Dependencies
 
