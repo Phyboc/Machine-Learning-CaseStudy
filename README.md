@@ -12,7 +12,7 @@
   <a href="https://github.com/Phyboc/Machine-Learning-CaseStudy/stargazers"><img src="https://img.shields.io/github/stars/Phyboc/Machine-Learning-CaseStudy?style=for-the-badge&logo=github&color=gold" alt="GitHub stars"></a>
   <a href="https://github.com/Phyboc/Machine-Learning-CaseStudy/network/members"><img src="https://img.shields.io/github/forks/Phyboc/Machine-Learning-CaseStudy?style=for-the-badge&logo=github" alt="GitHub forks"></a>
   <a href="https://github.com/Phyboc/Machine-Learning-CaseStudy/blob/main/LICENSE"><img src="https://img.shields.io/github/license/Phyboc/Machine-Learning-CaseStudy?style=for-the-badge" alt="License"></a>
-  <a href="https://machine-learning-casestudy-c2hrudjn2vlgwjzeqbs4b5.streamlit.app/"><img src="https://img.shields.io/badge/Live%20Demo-Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white" alt="Live Streamlit demo"></a>
+  <a href="https://machine-learning-casestudy-c2hrudjn2vlgwjzeqbs4b5.streamlit.app/" target="_blank"><img src="https://img.shields.io/badge/Live%20Demo-Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white" alt="Live Streamlit demo"></a>
 </p>
 
 <p>
