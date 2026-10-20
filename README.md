@@ -9,7 +9,7 @@
 </p>
 
 <p>
-[![Live Streamlit demo](https://shields.io)](https://streamlit.app)
+<a href="https://machine-learning-casestudy-c2hrudjn2vlgwjzeqbs4b5.streamlit.app/" target="_blank"><img src="https://img.shields.io/badge/Live%20Demo-Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white" alt="Live Streamlit demo"></a>
 </p>
 
 <p>
