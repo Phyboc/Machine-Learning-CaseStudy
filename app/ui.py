@@ -18,8 +18,8 @@ MAX_UPLOAD_ROWS = 5000
 
 
 def setup_page(title: str, layout: str = "wide") -> None:
-    st.set_page_config(page_title=f"{title} · ML Case Study", page_icon=icon, layout=layout)
-    st.title(f"{icon} {title}")
+    st.set_page_config(page_title=f"{title} · ML Case Study", layout=layout)
+    st.title(f"{title}")
 
 
 def repo_note() -> None:
