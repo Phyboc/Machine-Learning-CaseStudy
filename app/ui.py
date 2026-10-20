@@ -17,7 +17,7 @@ from core.schemas import FeatureSchema
 MAX_UPLOAD_ROWS = 5000
 
 
-def setup_page(title: str, icon: str = "🧪", layout: str = "wide") -> None:
+def setup_page(title: str, layout: str = "wide") -> None:
     st.set_page_config(page_title=f"{title} · ML Case Study", page_icon=icon, layout=layout)
     st.title(f"{icon} {title}")
 
