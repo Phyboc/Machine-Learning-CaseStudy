@@ -9,10 +9,7 @@
 </p>
 
 <p>
-  <a href="https://github.com/Phyboc/Machine-Learning-CaseStudy/stargazers"><img src="https://img.shields.io/github/stars/Phyboc/Machine-Learning-CaseStudy?style=for-the-badge&logo=github&color=gold" alt="GitHub stars"></a>
-  <a href="https://github.com/Phyboc/Machine-Learning-CaseStudy/network/members"><img src="https://img.shields.io/github/forks/Phyboc/Machine-Learning-CaseStudy?style=for-the-badge&logo=github" alt="GitHub forks"></a>
-  <a href="https://github.com/Phyboc/Machine-Learning-CaseStudy/blob/main/LICENSE"><img src="https://img.shields.io/github/license/Phyboc/Machine-Learning-CaseStudy?style=for-the-badge" alt="License"></a>
-  <a href="https://machine-learning-casestudy-c2hrudjn2vlgwjzeqbs4b5.streamlit.app/" target="_blank"><img src="https://img.shields.io/badge/Live%20Demo-Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white" alt="Live Streamlit demo"></a>
+[![Live Streamlit demo](https://shields.io)](https://streamlit.app)
 </p>
 
 <p>
@@ -27,15 +24,15 @@
 
 ---
 
-## ✨ Project at a glance
+## Project at a glance
 
 This repository presents three complementary machine learning tracks using three real-world datasets:
 
 | Track | Problem | Dataset | Approach |
 |---|---|---|---|
-| 🛡️ **Classification** | Detect fraudulent banking transactions | Fraud Detection Bank Dataset | 10 classifiers, stratified evaluation, tuning, champion selection |
-| 🌡️ **Regression** | Predict superconducting critical temperature | UCI Superconductivity Dataset | 10 regressors, feature engineering, cross-validation, tuning |
-| ✈️ **Clustering** | Segment airline customers by service experience | Airplane Customer Satisfaction Dataset | K-Means model selection, profiling, PCA/t-SNE, post-hoc validation |
+| **Classification** | Detect fraudulent banking transactions | Fraud Detection Bank Dataset | 10 classifiers, stratified evaluation, tuning, champion selection |
+| **Regression** | Predict superconducting critical temperature | UCI Superconductivity Dataset | 10 regressors, feature engineering, cross-validation, tuning |
+| **Clustering** | Segment airline customers by service experience | Airplane Customer Satisfaction Dataset | K-Means model selection, profiling, PCA/t-SNE, post-hoc validation |
 
 The project is designed as a complete workflow rather than a collection of isolated notebooks:
 
@@ -43,11 +40,11 @@ The project is designed as a complete workflow rather than a collection of isola
 
 Key engineering principles include `random_state=42` throughout, explicit leakage prevention, reproducible exports, standardized metrics, and automated tests for the deployment layer.
 
-> 🚀 **[Try the live Streamlit application →](https://machine-learning-casestudy-c2hrudjn2vlgwjzeqbs4b5.streamlit.app/)**
+> **[Try the live Streamlit application →](https://machine-learning-casestudy-c2hrudjn2vlgwjzeqbs4b5.streamlit.app/)**
 
 ---
 
-## 📊 Headline results
+## Headline results
 
 ### Fraud detection
 
@@ -90,7 +87,7 @@ The clustering analysis deliberately reports weak absolute separation rather tha
 
 ---
 
-## 🧭 Repository structure
+## Repository structure
 
 ```text
 Machine-Learning-CaseStudy/
@@ -127,7 +124,7 @@ Machine-Learning-CaseStudy/
 
 ---
 
-## 🗂️ Datasets
+## Datasets
 
 | Dataset | Task | Shape | Target / usage |
 |---|---|---:|---|
@@ -139,7 +136,7 @@ The clustering workflow excludes the satisfaction label from feature constructio
 
 ---
 
-## 🔬 Methodology
+## Methodology
 
 ### Classification
 
@@ -178,7 +175,7 @@ The clustering workflow excludes the satisfaction label from feature constructio
 
 ---
 
-## 🖥️ Interactive application
+## Interactive application
 
 The Streamlit app is a deployment and exploration layer over the persisted project artifacts.
 
@@ -197,7 +194,7 @@ The classification page distinguishes genuine probabilities from raw decision ma
 
 ---
 
-## ⚡ Quick start
+## Quick start
 
 ### 1. Clone and install
 
@@ -257,7 +254,7 @@ The tests cover artifact loading, metadata validity, schema and feature-order ch
 
 ---
 
-## 📁 Results and artifacts
+## Results and artifacts
 
 Generated outputs are organized by track under [`results/`](results/):
 
@@ -276,7 +273,7 @@ predictions = pipeline.predict(raw_feature_frame)
 
 ---
 
-## 🧰 Technology
+## Technology
 
 - Python 3.10+
 - pandas, NumPy, SciPy
@@ -288,7 +285,7 @@ predictions = pipeline.predict(raw_feature_frame)
 
 ---
 
-## ⚠️ Interpretation notes
+## Interpretation notes
 
 - Reported metrics are hold-out or cross-validation results from the persisted experiments; they are not guarantees for new data.
 - Classification inputs contain 96 features, so arbitrary manual edits may create combinations not represented in the training distribution.
